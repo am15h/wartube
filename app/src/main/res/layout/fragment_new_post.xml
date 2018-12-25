@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.NewPostFragment">
+
+
+    <ImageView
+        android:id="@+id/new_post_img"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        tools:src="@tools:sample/avatars" />
+
+    <EditText
+        android:id="@+id/new_post_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="say something"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/new_post_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Post" />
+
+</LinearLayout>
