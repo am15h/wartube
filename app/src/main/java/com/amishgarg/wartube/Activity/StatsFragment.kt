@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.amishgarg.wartube.Model.YoutubeModels.ChannelResponse
 import com.amishgarg.wartube.R
 import com.amishgarg.wartube.rest.ApiClient
@@ -20,8 +22,10 @@ import com.jjoe64.graphview.series.DataPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.HashMap
-
+import java.util.*
+import androidx.databinding.adapters.TextViewBindingAdapter.setText
+import androidx.lifecycle.Observer
+import com.squareup.picasso.Picasso
 
 
 /**
@@ -38,19 +42,9 @@ class StatsFragment : Fragment() {
 
     //todo: check internet
     //todo:test on small screens
+    // TODO : ADD DATA BINDING
 
-    private val GOOGLE_YOUTUBE_API_KEY = "AIzaSyDK__bGjXkyQzUV--1jiLfpn3h4gRrUtK4"
-    private val CHANNEL_ID_TS = "UCq-Fj5jknLsUf-MWSy4_brA"
-    private val CHANNEL_ID_PDP = "UC-lHJZR3Gqxm24_Vd_AJ5Yw"
-    var SUBS_TS = 0
-    var SUBS_PDP = 0
-
-
-    private lateinit var mRunnable:Runnable
-    inline fun runnable(crossinline body: Runnable.() -> Unit) = object : Runnable {
-        override fun run() = this.body()
-    }
-
+    private lateinit var viewModel : StatsViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -78,10 +72,63 @@ class StatsFragment : Fragment() {
         series.setSpacing(25);
         graphViewSettings(graphView)
 
-        Glide.with(this).load("https://yt3.ggpht.com/a-/AN66SAztY6oYWZnS1Cae9o4_msEE1H83Tld5cFtl3Q=s240-mo-c-c0xffffffff-rj-k-no").into(logoPDP);
-        Glide.with(this).load("https://yt3.ggpht.com/a-/AN66SAxPfKnfHAnAs0rOqaSwINOxDYJsyj-gPBP0OQ=s240-mo-c-c0xffffffff-rj-k-no").into(logoTS)
+        Picasso.get().load("https://yt3.ggpht.com/a-/AN66SAztY6oYWZnS1Cae9o4_msEE1H83Tld5cFtl3Q=s240-mo-c-c0xffffffff-rj-k-no").into(logoPDP);
+        Picasso.get().load("https://yt3.ggpht.com/a-/AN66SAxPfKnfHAnAs0rOqaSwINOxDYJsyj-gPBP0OQ=s240-mo-c-c0xffffffff-rj-k-no").into(logoTS)
 
-        val qMap = HashMap<String, String>()
+        viewModel = ViewModelProviders.of(this).get(StatsViewModel::class.java)
+
+         val subsObserver: Observer<List<Int>> = Observer {
+             subsPdp.text = it[0].toString()
+             subsTS.text = it[1].toString()
+             diffTextView.text = it[2].toString()
+             var values = arrayOf(DataPoint(0.5, it[0].toDouble()), DataPoint(1.5, it[1].toDouble()), DataPoint(2.5, it[2].toDouble()))
+             series.resetData(values)
+         }
+
+        viewModel.subsData.observe(this, subsObserver)
+
+
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+    }
+
+    fun graphViewSettings(graphView: GraphView)
+    {
+        // set manual X bounds
+        graphView.getViewport().setYAxisBoundsManual(true);
+        graphView.getViewport().setMinY(0.0);
+        graphView.getViewport().setMaxY(100000000.0);
+
+        graphView.getViewport().setXAxisBoundsManual(true);
+        graphView.getViewport().setMinX(0.0);
+        graphView.getViewport().setMaxX(4.0);
+        graphView.getViewport().setScrollable(true); // enables horizontal scrolling
+        graphView.getViewport().setScrollableY(true); // enables vertical scrolling
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*        val qMap = HashMap<String, String>()
         qMap["part"] = "snippet,contentDetails,statistics"
         qMap["id"] = CHANNEL_ID_TS
         qMap["key"] = GOOGLE_YOUTUBE_API_KEY
@@ -89,11 +136,12 @@ class StatsFragment : Fragment() {
         val qMap2 = HashMap<String, String>()
         qMap2["part"] = "snippet,contentDetails,statistics"
         qMap2["id"] = CHANNEL_ID_PDP
-        qMap2["key"] = GOOGLE_YOUTUBE_API_KEY
+        qMap2["key"] = GOOGLE_YOUTUBE_API_KEY*/
 
-        val apiService = ApiClient.getClient().create(ApiInterface::class.java)
+//        val apiService = ApiClient.getClient().create(ApiInterface::class.java)
 
 
+/*
         fun getSubsData() : Unit
         {
 
@@ -136,38 +184,18 @@ class StatsFragment : Fragment() {
             })
 
         }
+*/
 
-        var shouldStopLoop = false
+/*   var shouldStopLoop = false
 
-        val handler = Handler()
-        val runnableCode = runnable {
-            // do something
-            getSubsData()
-            Log.d("GEEK", "called getSubsData")
-            if(!shouldStopLoop)
-            {
-                handler.postDelayed(this, 10000)
-            }
-        }
-        handler.post(runnableCode)
-
-
-    }
-
-
-    fun graphViewSettings(graphView: GraphView)
-    {
-        // set manual X bounds
-        graphView.getViewport().setYAxisBoundsManual(true);
-        graphView.getViewport().setMinY(0.0);
-        graphView.getViewport().setMaxY(100000000.0);
-
-        graphView.getViewport().setXAxisBoundsManual(true);
-        graphView.getViewport().setMinX(0.0);
-        graphView.getViewport().setMaxX(4.0);
-        graphView.getViewport().setScrollable(true); // enables horizontal scrolling
-        graphView.getViewport().setScrollableY(true); // enables vertical scrolling
-    }
-}
-
-
+   val handler = Handler()
+   val runnableCode = runnable {
+       // do something
+       getSubsData()
+       Log.d("GEEK", "called getSubsData")
+       if(!shouldStopLoop)
+       {
+           handler.postDelayed(this, 10000)
+       }
+   }
+   handler.post(runnableCode)*/
