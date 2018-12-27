@@ -12,13 +12,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.amishgarg.wartube.Adapter.PostListAdapter
 import com.amishgarg.wartube.Adapter.PostsRecyclerAdapter
 import com.amishgarg.wartube.FirebaseUtil
 import com.amishgarg.wartube.Model.Author
 import com.amishgarg.wartube.Model.Post
+import com.amishgarg.wartube.PostsViewModel
 import com.amishgarg.wartube.R
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -48,8 +54,10 @@ class PostsFragment : Fragment() {
     lateinit var auth: FirebaseAuth
     lateinit var databaseReference: DatabaseReference
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+  //  private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
+
+    private val mAdapter = PostListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,26 +91,40 @@ class PostsFragment : Fragment() {
         fab.setOnClickListener {
             findNavController().navigate(R.id.new_post_dest)
         }
+        val postsViewModel : PostsViewModel = ViewModelProviders.of(this).get(PostsViewModel::class.java)
 
-        var posts: MutableList<Post> = ArrayList()
-        posts.add(Post(Author("Belu","userid", "propic"), "", "dummy", "", System.currentTimeMillis()))
-        posts.add(Post(Author("Belu2","userid2", "propic2"), "", "dummy2", "", System.currentTimeMillis()))
 
-        viewAdapter = PostsRecyclerAdapter(posts)
+
 
         recyclerView = view.findViewById<RecyclerView>(R.id.posts_recycler).apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
-            setHasFixedSize(true)
 
             // use a linear layout manager
             layoutManager = viewManager
 
             // specify an viewAdapter (see also next example)
-            adapter = viewAdapter
+            adapter = mAdapter
+
 
         }
 
+        val dummypost : List<Post> = listOf(Post(Author("sample1", "", ""), "", "samplepost1","", System.currentTimeMillis()))
+        mAdapter.submitList(dummypost)
+        postsViewModel.getPostsList().observe(this, Observer {
+            Log.d("List100", it[0].author.display_name)
+                mAdapter.submitList(it)
+        })
+
+        postsViewModel.getDataSnapshotLiveData().observe(this, Observer {
+            for (postSnap in it.children){
+            Log.d("FirebaseLive", postSnap.getValue(Post::class.java)?.timestamp.toString())}
+        })
+
+
+
+
+/*
         val myTopPostsQuery = databaseReference.child("posts")
                 .orderByChild("timestamp")
 
@@ -124,6 +146,7 @@ class PostsFragment : Fragment() {
                 // ...
             }
         })
+*/
 
 
 

@@ -11,6 +11,15 @@ import androidx.navigation.ui.*
 
 class MainActivity : androidx.appcompat.app.AppCompatActivity() {
 
+    //todo: Material UI
+    //todo: Add Likes section
+    //todo: Add comments section
+    //todo: Navigation, backstack, toolbar
+    //todo: MVVM to NewPostFragment
+    //todo: Solve Item Repeating bug
+    //todo: replace handler, runnable with something else in YoutubeRepository
+    //todo: Add room
+
 //    private val GOOGLE_YOUTUBE_API_KEY = "AIzaSyBV4XQEZ9l1HZeBQFL6ZZvHYfMhtnqUkmw"
 //    private val CHANNEL_ID_TS = "UCq-Fj5jknLsUf-MWSy4_brA"
 //    private val CHANNEL_ID_PDP = "UC-lHJZR3Gqxm24_Vd_AJ5Yw"

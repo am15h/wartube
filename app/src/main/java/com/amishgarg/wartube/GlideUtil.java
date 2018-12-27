@@ -25,7 +25,8 @@ public class GlideUtil {
         Glide.with(imageView.getContext())
                 .load(url)
                 .apply(new RequestOptions()
-                        .placeholder(colorDrawable))
+                        .placeholder(colorDrawable)
+                        .circleCrop())
                 .transition(withCrossFade())
                 .into(imageView);
     }

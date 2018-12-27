@@ -11,8 +11,11 @@ import com.amishgarg.wartube.rest.ApiInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class YoutubeRepository {
+
+    //todo: make it async task, IMP...
 
     private val GOOGLE_YOUTUBE_API_KEY = "AIzaSyDK__bGjXkyQzUV--1jiLfpn3h4gRrUtK4"
     private val CHANNEL_ID_TS = "UCq-Fj5jknLsUf-MWSy4_brA"
@@ -86,10 +89,40 @@ class YoutubeRepository {
             Log.d("GEEK", "called getSubsData")
             if(!shouldStopLoop)
             {
-                handler.postDelayed(this, 2000)
+                handler.postDelayed(this, 1000)
             }
         }
         handler.post(runnableCode)
         return subsData
     }
+
+
+    fun callAsynchronousTask() {
+        val handler = Handler()
+        val timer = Timer()
+        val doAsynchronousTask = object : TimerTask() {
+            override fun run() {
+                handler.post {
+                    try {
+                        val performBackgroundTask = PerformBackgroundTask()
+                        // PerformBackgroundTask this class is the class that extends AsynchTask
+                        performBackgroundTask.execute()
+                    } catch (e: Exception) {
+                        // TODO Auto-generated catch block
+                    }
+                }
+            }
+
+
+        }
+        timer.schedule(doAsynchronousTask, 0, 1000) //execute in every 50000 ms
+    }
+}
+
+class PerformBackgroundTask() : AsyncTask<Void, Void, Void>(){
+
+    override fun doInBackground(vararg params: Void?): Void {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 }

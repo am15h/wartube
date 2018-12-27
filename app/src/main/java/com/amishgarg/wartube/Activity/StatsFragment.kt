@@ -46,13 +46,20 @@ class StatsFragment : Fragment() {
 
     private lateinit var viewModel : StatsViewModel
 
+    lateinit var subsPdp:TextView
+    lateinit var  subsTS:TextView
+    lateinit var  logoPDP : ImageView
+    lateinit var  logoTS : ImageView
+    lateinit var  diffTextView:TextView
+    lateinit var  graphView:GraphView
+
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-
         return inflater.inflate(R.layout.fragment_stats, container, false)
 
     }
@@ -60,38 +67,36 @@ class StatsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val subsPdp:TextView = view.findViewById(R.id.subsPdp)
-        val subsTS:TextView = view.findViewById(R.id.subsTS)
-        val logoPDP : ImageView = view.findViewById<ImageView>(R.id.img_pdp)
-        val logoTS : ImageView = view.findViewById<ImageView>(R.id.img_ts)
-        val diffTextView:TextView = view.findViewById(R.id.diff_text)
-        val graphView:GraphView = view.findViewById(R.id.graph)
+        subsPdp= view!!.findViewById(R.id.subsPdp)
+        subsTS = view!!.findViewById(R.id.subsTS)
+        logoPDP  = view!!.findViewById<ImageView>(R.id.img_pdp)
+        logoTS = view!!.findViewById<ImageView>(R.id.img_ts)
+        diffTextView = view!!.findViewById(R.id.diff_text)
+        graphView = view!!.findViewById(R.id.graph)
 
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         val series = BarGraphSeries(arrayOf(DataPoint(0.2, 2.0), DataPoint(1.0, 5.0), DataPoint(2.0, 3.0)))
         graphView.addSeries(series)
         series.setSpacing(25);
-        graphViewSettings(graphView)
+        graphViewSettings(this!!.graphView!!)
 
         Picasso.get().load("https://yt3.ggpht.com/a-/AN66SAztY6oYWZnS1Cae9o4_msEE1H83Tld5cFtl3Q=s240-mo-c-c0xffffffff-rj-k-no").into(logoPDP);
         Picasso.get().load("https://yt3.ggpht.com/a-/AN66SAxPfKnfHAnAs0rOqaSwINOxDYJsyj-gPBP0OQ=s240-mo-c-c0xffffffff-rj-k-no").into(logoTS)
 
         viewModel = ViewModelProviders.of(this).get(StatsViewModel::class.java)
 
-         val subsObserver: Observer<List<Int>> = Observer {
-             subsPdp.text = it[0].toString()
-             subsTS.text = it[1].toString()
-             diffTextView.text = it[2].toString()
-             var values = arrayOf(DataPoint(0.5, it[0].toDouble()), DataPoint(1.5, it[1].toDouble()), DataPoint(2.5, it[2].toDouble()))
-             series.resetData(values)
-         }
+        val subsObserver: Observer<List<Int>> = Observer {
+            subsPdp.text = it[0].toString()
+            subsTS.text = it[1].toString()
+            diffTextView.text = it[2].toString()
+            var values = arrayOf(DataPoint(0.5, it[0].toDouble()), DataPoint(1.5, it[1].toDouble()), DataPoint(2.5, it[2].toDouble()))
+            series.resetData(values)
+        }
 
         viewModel.subsData.observe(this, subsObserver)
-
-
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
     }
 

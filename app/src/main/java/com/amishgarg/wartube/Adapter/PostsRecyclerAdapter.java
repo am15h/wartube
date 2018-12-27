@@ -25,10 +25,17 @@ public class PostsRecyclerAdapter extends RecyclerView.Adapter<PostsRecyclerAdap
     private Context context;
     private int rowLayout = R.layout.posts_item;
 
+
+    public PostsRecyclerAdapter() {
+    }
+
     public PostsRecyclerAdapter(List<Post> postList) {
         this.postList = postList;
     }
 
+    public void submitList(List<Post> postList){
+        this.postList = postList;
+    }
     public static class PostViewHolder extends RecyclerView.ViewHolder
     {
 
