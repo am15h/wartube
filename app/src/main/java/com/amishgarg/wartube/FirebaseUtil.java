@@ -43,6 +43,19 @@ public class FirebaseUtil {
         return "posts/";
     }
 
+    public static String getLikesPath() {
+        return "likes/";
+    }
+
+    public static String getCommentsPath() {
+        return "comments/";
+    }
+
+
+    public static String getCommentCountPath() {
+        return "commentcount/";
+    }
+
     public static DatabaseReference getUsersRef() {
         return getBaseRef().child("users");
     }

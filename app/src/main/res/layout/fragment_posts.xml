@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".Activity.PostsFragment">
 
+    <ProgressBar
+        android:id="@+id/progressBar_cyclic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_weight="1"
+        android:minWidth="100dp"
+        android:minHeight="100dp"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/posts_recycler"
         android:layout_width="match_parent"

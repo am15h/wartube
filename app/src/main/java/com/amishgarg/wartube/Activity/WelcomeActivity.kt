@@ -38,7 +38,7 @@ class WelcomeActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
 
-        findViewById<SignInButton>(R.id.sign_in_button).setOnClickListener(this)
+        findViewById<com.shobhitpuri.custombuttons.GoogleSignInButton>(R.id.sign_in_button).setOnClickListener(this)
 
         // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

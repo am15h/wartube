@@ -3,6 +3,7 @@ package com.amishgarg.wartube;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.widget.ImageView;
@@ -36,18 +37,24 @@ public class GlideUtil {
         Context context = imageView.getContext();
         @SuppressLint("ResourceAsColor") ColorDrawable colorDrawable = new ColorDrawable(R.color.blue_grey_500);
 
-        if(url!=null && url!="") {
-            Picasso.get().load(url).into(imageView);
+        if(!url.equals("")) {
+            Picasso.get().load(url)
+                    .fit()
+                    .centerCrop()
+                    .into(imageView);
         }else
         {
-            Picasso.get().load(R.color.blue_grey_500).into(imageView);
+            Picasso.get().load(R.color.blue_grey_900)
+                    .fit()
+                    .centerCrop()
+                    .into(imageView);
+          // imageView.getLayoutParams().height = 0;
         }
 
     }
     public static void loadProfilePic(String url, ImageView imageView)
     {
         Context context = imageView.getContext();
-
         Glide.with(context)
                 .load(url)
                 .apply(new RequestOptions()

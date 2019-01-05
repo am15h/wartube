@@ -31,22 +31,26 @@ class TimeDisplay(timestamp: Long) {
             return getDate()
         }
         else {
-            if (seconds < 45)
-                time = "${Math.round(seconds)} secs"
+            if(seconds < 10)
+            {
+                time = "just now"
+            }
+            else if (seconds < 45)
+                time = "${Math.round(seconds)}s"
             else if (seconds < 90)
-                time = "a minute"
+                time = "1m"
             else if (minutes < 45)
-                time = "${Math.round(minutes)} mins"
+                time = "${Math.round(minutes)}m"
             else if (minutes < 90)
-                time = "an hour"
+                time = "1h"
             else if (hours < 24)
-                time = "${Math.round(hours)} hrs"
+                time = "${Math.round(hours)}h"
             else if (hours < 48)
-                time = "a day"
+                time = "1d"
             else if (days < 4)
-                time = "${Math.round(days)} days"
+                time = "${Math.round(days)}d"
         }
-        return time+" ago"
+        return time
     }
 
 }

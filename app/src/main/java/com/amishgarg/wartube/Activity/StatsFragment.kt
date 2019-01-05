@@ -2,29 +2,19 @@ package com.amishgarg.wartube.Activity
 
 
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.amishgarg.wartube.Model.YoutubeModels.ChannelResponse
 import com.amishgarg.wartube.R
-import com.amishgarg.wartube.rest.ApiClient
-import com.amishgarg.wartube.rest.ApiInterface
-import com.bumptech.glide.Glide
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.BarGraphSeries
 import com.jjoe64.graphview.series.DataPoint
 
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.*
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.lifecycle.Observer
+import com.amishgarg.wartube.GlideUtil
+import com.amishgarg.wartube.ViewModels.StatsViewModel
 import com.squareup.picasso.Picasso
 
 
@@ -73,6 +63,8 @@ class StatsFragment : Fragment() {
         logoTS = view!!.findViewById<ImageView>(R.id.img_ts)
         diffTextView = view!!.findViewById(R.id.diff_text)
         graphView = view!!.findViewById(R.id.graph)
+        GlideUtil.loadImagePicasso("https://yt3.ggpht.com/3Ss-aMQD695qaWBSWMy1mt6aNrIs5kIlL78Ccf_YGO4OHV1txzdWGy5J5bCUu7-T5MXJT3_W=w1280-fcrop64=1,32b75a57cd48a5a8-nd-c0xffffffff-rj-k-no", view!!.findViewById(R.id.bannerP))
+        GlideUtil.loadImagePicasso("https://yt3.ggpht.com/cJIQ7MY1vyBjLiTx-HS3qsXtImo3tek6ruE8v7s25OKUya9ive6k7MmNOgB04FPtFcNirJ6gPA=w1280-fcrop64=1,32b75a57cd48a5a8-nd-c0xffffffff-rj-k-no", view!!.findViewById(R.id.bannerT))
 
     }
 
@@ -106,6 +98,7 @@ class StatsFragment : Fragment() {
         graphView.getViewport().setYAxisBoundsManual(true);
         graphView.getViewport().setMinY(0.0);
         graphView.getViewport().setMaxY(100000000.0);
+
 
         graphView.getViewport().setXAxisBoundsManual(true);
         graphView.getViewport().setMinX(0.0);

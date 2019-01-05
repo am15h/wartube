@@ -1,41 +1,34 @@
 package com.amishgarg.wartube.Activity
 
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.widget.ProgressBar
+import android.widget.Spinner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amishgarg.wartube.Adapter.PostListAdapter
-import com.amishgarg.wartube.Adapter.PostsRecyclerAdapter
-import com.amishgarg.wartube.FirebaseUtil
 import com.amishgarg.wartube.Model.Author
 import com.amishgarg.wartube.Model.Post
-import com.amishgarg.wartube.PostsViewModel
+import com.amishgarg.wartube.ViewModels.PostsViewModel
 import com.amishgarg.wartube.R
+import com.amishgarg.wartube.ViewModels.PostDetailViewModel
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.common.collect.Lists
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.ValueEventListener
-import java.util.ArrayList
+import kotlinx.android.synthetic.main.fragment_posts.*
 
 
 /**
@@ -50,13 +43,17 @@ import java.util.ArrayList
 class PostsFragment : Fragment() {
 
 
+    val TAG = "PostsFragmentDebug"
+
+    lateinit var progressBar: ProgressBar
     var user: FirebaseUser? = null
     lateinit var auth: FirebaseAuth
     lateinit var databaseReference: DatabaseReference
     private lateinit var recyclerView: RecyclerView
   //  private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
-
+    private lateinit var postsViewModel : PostsViewModel
+    private lateinit var postsDetailViewModel: PostDetailViewModel
     private val mAdapter = PostListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +67,8 @@ class PostsFragment : Fragment() {
     ): View? {
         setHasOptionsMenu(true)
 
+        val view : View = inflater.inflate(R.layout.fragment_posts, container, false)
+
         auth = FirebaseAuth.getInstance()
         user = auth.currentUser
         if(user == null)
@@ -78,25 +77,14 @@ class PostsFragment : Fragment() {
         }
         databaseReference = FirebaseDatabase.getInstance().getReference()
 
-        return inflater.inflate(R.layout.fragment_posts, container, false)
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+        progressBar = view.findViewById(R.id.progressBar_cyclic)
         val fab : FloatingActionButton = view.findViewById(R.id.fab)
         recyclerView = view.findViewById<RecyclerView>(R.id.posts_recycler)
         viewManager = LinearLayoutManager(context)
         fab.setOnClickListener {
             findNavController().navigate(R.id.new_post_dest)
         }
-        val postsViewModel : PostsViewModel = ViewModelProviders.of(this).get(PostsViewModel::class.java)
-
-
-
-
-        recyclerView = view.findViewById<RecyclerView>(R.id.posts_recycler).apply {
+        recyclerView = view!!.findViewById<RecyclerView>(R.id.posts_recycler).apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
 
@@ -109,17 +97,50 @@ class PostsFragment : Fragment() {
 
         }
 
-        val dummypost : List<Post> = listOf(Post(Author("sample1", "", ""), "", "samplepost1","", System.currentTimeMillis()))
-        mAdapter.submitList(dummypost)
+
+        return view
+
+    }
+
+
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        postsViewModel = ViewModelProviders.of(this).get(PostsViewModel::class.java)
+        progressBar_cyclic.visibility = View.VISIBLE
         postsViewModel.getPostsList().observe(this, Observer {
-            Log.d("List100", it[0].author.display_name)
-                mAdapter.submitList(it)
+            //            Log.d("List100", it[0].author.display_name)
+            Log.d("FirebaseQueryLiveData", "Observing")
+            progressBar_cyclic.visibility = View.GONE
+            mAdapter.submitList(Lists.reverse(it))
+            mAdapter.notifyDataSetChanged()
         })
 
-        postsViewModel.getDataSnapshotLiveData().observe(this, Observer {
-            for (postSnap in it.children){
-            Log.d("FirebaseLive", postSnap.getValue(Post::class.java)?.timestamp.toString())}
-        })
+
+
+
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -149,9 +170,3 @@ class PostsFragment : Fragment() {
 */
 
 
-
-    }
-
-
-
-}

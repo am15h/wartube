@@ -1,12 +1,9 @@
-package com.amishgarg.wartube.Activity
+package com.amishgarg.wartube.ViewModels
 
-import android.text.style.SubscriptSpan
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-import com.amishgarg.wartube.YoutubeRepository
+import com.amishgarg.wartube.livedata.YoutubeRepository
 
 
 class StatsViewModel: ViewModel() {

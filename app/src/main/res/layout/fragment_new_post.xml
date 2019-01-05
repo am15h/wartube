@@ -1,32 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+
     tools:context=".Activity.NewPostFragment">
 
 
-    <ImageView
-        android:id="@+id/new_post_img"
+    <RelativeLayout
+        android:id="@+id/rl1"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        tools:src="@tools:sample/avatars" />
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/discard_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="Discard" />
+
+        <Button
+            android:id="@+id/new_post_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:text="Post" />
+
+    </RelativeLayout>
+
 
     <EditText
         android:id="@+id/new_post_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/rl1"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="0dp"
         android:ems="10"
-        android:hint="say something"
-        android:inputType="textPersonName" />
+        android:hint="Say Something..."
+        android:inputType="textMultiLine" />
 
-    <Button
-        android:id="@+id/new_post_button"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/new_post_img"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/new_post_text"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        tools:src="@tools:sample/backgrounds/scenic[2]" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_img_button"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Post" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Add Image"
+        app:icon="@drawable/ic_baseline_wallpaper_24px"
+        app:iconGravity="textStart" />
 
-</LinearLayout>
+</RelativeLayout>

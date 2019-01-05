@@ -1,6 +1,7 @@
 package com.amishgarg.wartube.Activity
 
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -30,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import kotlinx.android.synthetic.main.fragment_new_post.*
 import retrofit2.Retrofit
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -42,10 +44,10 @@ class NewPostFragment : Fragment() {
     lateinit var postImageView: ImageView
     lateinit var postEditText: EditText
     lateinit var postButton: Button
-
-    val GALLERY = 1;
-    val CAMERA = 2;
-
+    lateinit var addImageButton: Button
+    lateinit var progressDialog: ProgressDialog
+    val GALLERY = 1
+    val CAMERA = 2
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -59,14 +61,19 @@ class NewPostFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         postImageView = view.findViewById(R.id.new_post_img)
+        addImageButton = view.findViewById(R.id.add_img_button)
         postEditText = view.findViewById(R.id.new_post_text)
         postButton = view.findViewById(R.id.new_post_button)
-
-        postImageView.setOnClickListener {
+        progressDialog = ProgressDialog(context)
+        progressDialog.setMessage("Uploading...")
+        add_img_button.setOnClickListener {
             showDialog()
         }
 
-
+        postButton.setOnClickListener {
+            uploadPost(postEditText.text.toString())
+            progressDialog.show()
+        }
 
 
     }
@@ -139,15 +146,48 @@ class NewPostFragment : Fragment() {
 
         }
         val  bitmap : Bitmap = (postImageView.drawable as BitmapDrawable).bitmap
+
         postButton.setOnClickListener {
             uploadPost( postEditText.text.toString(), bitmap)
             findNavController().navigate(R.id.posts_dest)
         }
     }
 
+    private fun uploadPost(postText : String)
+    {
+        val postTimestamp = System.currentTimeMillis()
+        val postsKey = FirebaseUtil.getCurrentUserId()+postTimestamp
+
+        val author: Author = FirebaseUtil.getAuthor()
+        var post = Post()
+        post = Post(author, "", postText, "" ,postTimestamp)
+
+                val updatedUserData = java.util.HashMap<String, Any>()
+                Log.d("upload", FirebaseUtil.getPeoplePath() + author.uid + "/posts/"
+                        + postsKey)
+                updatedUserData[FirebaseUtil.getPeoplePath() + author.uid + "/posts/"
+                        + postsKey] = true
+                updatedUserData[FirebaseUtil.getPostsPath() + postsKey] = ObjectMapper().convertValue(post, Map::class.java)
+
+                databaseReference.updateChildren(updatedUserData) { p0: DatabaseError?, p1: DatabaseReference ->
+                    if (p0 == null) {
+                        progressDialog.hide()
+                        findNavController().navigate(R.id.posts_dest)
+                    }
+                    else
+                    {
+                        Toast.makeText(context, "Cannot Upload Post",
+                                Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+
     private fun uploadPost(postText : String, bitmap: Bitmap)
     {
-        val postsKey = databaseReference.child("posts").push().key
+        val postTimestamp = System.currentTimeMillis()
+        val postsKey = FirebaseUtil.getCurrentUserId()+postTimestamp
+
         val storageReference : StorageReference = FirebaseStorage.getInstance().reference.child("images").child(postsKey!!)
 
         var baos : ByteArrayOutputStream = ByteArrayOutputStream()
@@ -162,7 +202,7 @@ class NewPostFragment : Fragment() {
             storageReference.downloadUrl.addOnSuccessListener{
                 downloadurl = it.toString()
                 Log.d("Upload", downloadurl)
-                 post = Post(author, downloadurl, postText, storageReference.toString() ,System.currentTimeMillis())
+                post = Post(author, downloadurl, postText, storageReference.toString() ,postTimestamp)
                 val updatedUserData = java.util.HashMap<String, Any>()
                 Log.d("upload", FirebaseUtil.getPeoplePath() + author.uid + "/posts/"
                         + postsKey)
@@ -170,27 +210,28 @@ class NewPostFragment : Fragment() {
                         + postsKey] = true
                 updatedUserData[FirebaseUtil.getPostsPath() + postsKey] = ObjectMapper().convertValue(post, Map::class.java)
 
-                databaseReference.updateChildren(updatedUserData, object: DatabaseReference.CompletionListener
-                {
-                    override fun onComplete(p0: DatabaseError?, p1: DatabaseReference) {
-                        if (p0 != null) {
-                            Log.e("upload", "cannot update database")
-                            Log.e("upload", p0.toString())
-                        }}
-                })
+                FirebaseUtil.getBaseRef().updateChildren(updatedUserData) { p0: DatabaseError?, p1: DatabaseReference ->
+                    if (p0 == null) {
+                        progressDialog.hide()
+                        findNavController().navigate(R.id.posts_dest)
+                    }
+                    else
+                    {
+                        Toast.makeText(context, "Cannot Upload Post",
+                                Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
 
         }.addOnFailureListener {
             Log.d("Upload", "Failed")
         }
 
-
-
-
-
-
     }
+
 }
+
+
 
 
 

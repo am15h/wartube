@@ -1,4 +1,4 @@
-package com.amishgarg.wartube
+package com.amishgarg.wartube.livedata
 
 import android.os.AsyncTask
 import android.os.Handler
@@ -32,7 +32,7 @@ class YoutubeRepository {
         override fun run() = this.body()
     }
 
-    fun getInstance() :  YoutubeRepository
+    fun getInstance() : YoutubeRepository
     {
         return YoutubeRepository()
     }

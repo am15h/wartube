@@ -53,7 +53,7 @@ public class PostsRecyclerAdapter extends RecyclerView.Adapter<PostsRecyclerAdap
             timestamp = itemView.findViewById(R.id.post_timestamp);
             postPhoto = itemView.findViewById(R.id.post_photo);
             postText = itemView.findViewById(R.id.post_text);
-            postNumLikes = itemView.findViewById(R.id.post_num_likes);
+         //   postNumLikes = itemView.findViewById(R.id.post_num_likes);
         }
     }
 

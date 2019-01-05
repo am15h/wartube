@@ -1,4 +1,4 @@
-package com.amishgarg.wartube.Activity;
+package com.amishgarg.wartube.livedata;
 
 import android.util.Log;
 
@@ -15,27 +15,22 @@ import java.util.List;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-public class FirebaseQueryLiveData extends LiveData<DataSnapshot> {
+public class PostDetailLiveData extends LiveData<Post> {
 
     private static final String LOG_TAG = "FirebaseQueryLiveData";
 
     private final Query query;
-    private final MyValueEventListener listener = new MyValueEventListener();
+    private final PostDetailLiveData.MyValueEventListener listener = new PostDetailLiveData.MyValueEventListener();
 
-    MutableLiveData<List<Post>> posts = new MutableLiveData<>();
-    List<Post> postList = new ArrayList<>();
-
-    public FirebaseQueryLiveData(Query query) {
+    public PostDetailLiveData(Query query) {
         this.query = query;
     }
 
-    public FirebaseQueryLiveData(DatabaseReference ref) {
+    public PostDetailLiveData(DatabaseReference ref) {
         this.query = ref;
     }
 
-    public MutableLiveData<List<Post>> getPosts(){
-        return posts;
-    }
+
 
     @Override
     protected void onActive() {
@@ -50,23 +45,11 @@ public class FirebaseQueryLiveData extends LiveData<DataSnapshot> {
     }
 
     private class MyValueEventListener implements ValueEventListener {
+
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            setValue(dataSnapshot);
-            for (DataSnapshot postSnapshot : dataSnapshot.getChildren())
-            {
-                if(postSnapshot != null)
-                {
-                    Log.d("FirebaseLiveData", postSnapshot.getValue(Post.class).getTimestamp().toString());
-                    postList.add(postSnapshot.getValue(Post.class));
-
-                }
-                else
-                {
-                    Log.e(LOG_TAG, "NULL POSTSNAP");
-                }
-            }
-            posts.setValue(postList);
+            setValue(dataSnapshot.getValue(Post.class));
+            // posts.setValue(postList);
         }
 
         @Override
@@ -74,6 +57,5 @@ public class FirebaseQueryLiveData extends LiveData<DataSnapshot> {
             Log.e(LOG_TAG, "Can't listen to query " + query, databaseError.toException());
         }
     }
+
 }
-
-
