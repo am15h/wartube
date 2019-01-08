@@ -216,7 +216,14 @@ class PostDetailFragment : Fragment() {
         }
 
         postCommentButton.setOnClickListener {
-            uploadComment(newCommentText.text.toString())
+            if(newCommentText.text.toString().length > 3) {
+                uploadComment(newCommentText.text.toString())
+            }
+            else
+            {
+                Toast.makeText(context, "At least 3 characters required",
+                        Toast.LENGTH_LONG).show()
+            }
         }
     }
 

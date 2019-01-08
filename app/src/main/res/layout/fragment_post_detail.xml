@@ -148,7 +148,7 @@ android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:layout_toRightOf="@+id/post_num_likesd"
-                        app:srcCompat="@drawable/new_post_icon" />
+                        app:srcCompat="@drawable/ic_baseline_comment_24px" />
 
                     <TextView
                         android:id="@+id/post_num_comd"
@@ -192,13 +192,12 @@ android:layout_height="wrap_content"
     </androidx.core.widget.NestedScrollView>
 
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:background="@color/dark_blue">
+        android:background="@color/grey">
 
         <EditText
             android:id="@+id/new_post_comment"
@@ -206,7 +205,9 @@ android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginLeft="2dp"
             android:layout_marginTop="0dp"
+            android:layout_marginRight="2dp"
             android:layout_toLeftOf="@+id/post_comment_button"
             android:ems="10"
             android:hint="Add a comment"
@@ -219,6 +220,7 @@ android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="0dp"
+            android:background="@android:color/transparent"
             android:src="@drawable/ic_outline_send_24px" />
 
     </RelativeLayout>

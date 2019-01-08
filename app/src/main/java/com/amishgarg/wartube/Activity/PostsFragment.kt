@@ -51,11 +51,11 @@ class PostsFragment : Fragment() {
 
     val TAG = "PostsFragmentDebug"
 
-    companion object {
+
 
         lateinit var progressBar: ProgressBar
 
-    }
+
     var user: FirebaseUser? = null
     lateinit var auth: FirebaseAuth
     lateinit var databaseReference: DatabaseReference
@@ -122,14 +122,17 @@ class PostsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val myTopPostsQuery = FirebaseUtil.getBaseRef().child("posts")
+                .orderByChild("timestamp")
 
 
-        postsViewModel = ViewModelProviders.of(this).get(PostsViewModel::class.java)
+        val options : FirebaseRecyclerOptions<Post> = FirebaseRecyclerOptions.Builder<Post>()
+                .setQuery(myTopPostsQuery, Post::class.java)
+                .build()
+
 
         progressBar_cyclic.visibility = View.VISIBLE
-        mAdapter = postsViewModel.getApadter()
-
-
+        mAdapter = PostsRecyclerAdapter(options, progressBar)
 
         recyclerView.layoutManager = viewManager
         recyclerView.adapter = mAdapter

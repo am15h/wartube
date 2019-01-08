@@ -18,11 +18,6 @@ class PostsViewModel: ViewModel() {
             .orderByChild("timestamp")
 
 
-    val options : FirebaseRecyclerOptions<Post> = FirebaseRecyclerOptions.Builder<Post>()
-            .setQuery(myTopPostsQuery, Post::class.java)
-            .build()
-
-    val mAdapter = PostsRecyclerAdapter(options)
 
 
     private val liveData = FirebaseQueryLiveData(myTopPostsQuery)
@@ -34,8 +29,6 @@ class PostsViewModel: ViewModel() {
         return liveData
     }
 
-    fun getApadter() : PostsRecyclerAdapter {
-        return mAdapter
-    }
+
 
 }

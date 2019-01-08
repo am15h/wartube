@@ -32,7 +32,7 @@
         android:label="PostDetaiFragment" />
     <fragment
         android:id="@+id/profile_dest"
-        android:name="com.amishgarg.wartube.ProfileFragment"
+        android:name="com.amishgarg.wartube.Activity.ProfileFragment"
         android:label="ProfileFragment" />
     <activity
         android:id="@+id/signup_dest"

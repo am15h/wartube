@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -48,7 +49,7 @@ public class PostsRecyclerAdapter extends FirebaseRecyclerAdapter<Post, Recycler
     private Context context;
     int total_types;
     String postKey;
-
+    ProgressBar progressBar;
 
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
@@ -56,8 +57,9 @@ public class PostsRecyclerAdapter extends FirebaseRecyclerAdapter<Post, Recycler
      *
      * @param options
      */
-    public PostsRecyclerAdapter(@NonNull FirebaseRecyclerOptions<Post> options) {
+    public PostsRecyclerAdapter(@NonNull FirebaseRecyclerOptions<Post> options, ProgressBar progressBar) {
         super(options);
+        this.progressBar =progressBar;
     }
 
 
@@ -123,11 +125,11 @@ public class PostsRecyclerAdapter extends FirebaseRecyclerAdapter<Post, Recycler
         switch (viewType) {
             case Post.TEXT_TYPE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.posts_text_item, parent, false);
-                PostsFragment.progressBar.setVisibility(View.GONE);
+              progressBar.setVisibility(View.GONE);
                 return new TextTypeViewHolder(view);
             case Post.IMAGE_TYPE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.posts_item, parent, false);
-                PostsFragment.progressBar.setVisibility(View.GONE);
+             progressBar.setVisibility(View.GONE);
                 return new ImageTypeViewHolder(view);
         }
         return null;
@@ -386,7 +388,6 @@ public class PostsRecyclerAdapter extends FirebaseRecyclerAdapter<Post, Recycler
 
         }
     }
-
 
 
 }

@@ -72,8 +72,16 @@ class NewPostFragment : Fragment() {
         }
 
         postButton.setOnClickListener {
-            uploadPost(postEditText.text.toString())
-            progressDialog.show()
+            if(postEditText.text.toString().length > 5) {
+                uploadPost(postEditText.text.toString())
+                progressDialog.show()
+                findNavController().navigate(R.id.posts_dest)
+            }else
+            {
+                Toast.makeText(context, "At least 5 characters required",
+                        Toast.LENGTH_LONG).show()
+            }
+
         }
 
 
@@ -150,8 +158,14 @@ class NewPostFragment : Fragment() {
         val  bitmap : Bitmap = (postImageView.drawable as BitmapDrawable).bitmap
 
         postButton.setOnClickListener {
-            uploadPost( postEditText.text.toString(), bitmap)
-            findNavController().navigate(R.id.posts_dest)
+            if(postEditText.text.toString().length > 5) {
+                uploadPost(postEditText.text.toString(), bitmap)
+                progressDialog.show()
+            }else
+            {
+                Toast.makeText(context, "At least 5 characters required",
+                        Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -168,7 +182,7 @@ class NewPostFragment : Fragment() {
                 Log.d("upload", FirebaseUtil.getPeoplePath() + author.uid + "/posts/"
                         + postsKey)
                 updatedUserData[FirebaseUtil.getPeoplePath() + author.uid + "/posts/"
-                        + postsKey] = true
+                        + postsKey] = ObjectMapper().convertValue(post, Map::class.java)
                 updatedUserData[FirebaseUtil.getPostsPath() + postsKey] = ObjectMapper().convertValue(post, Map::class.java)
 
                 databaseReference.updateChildren(updatedUserData) { p0: DatabaseError?, p1: DatabaseReference ->
@@ -216,7 +230,7 @@ class NewPostFragment : Fragment() {
                 Log.d("upload", FirebaseUtil.getPeoplePath() + author.uid + "/posts/"
                         + postsKey)
                 updatedUserData[FirebaseUtil.getPeoplePath() + author.uid + "/posts/"
-                        + postsKey] = true
+                        + postsKey] = ObjectMapper().convertValue(post, Map::class.java)
                 updatedUserData[FirebaseUtil.getPostsPath() + postsKey] = ObjectMapper().convertValue(post, Map::class.java)
 
                 FirebaseUtil.getBaseRef().updateChildren(updatedUserData) { p0: DatabaseError?, p1: DatabaseReference ->

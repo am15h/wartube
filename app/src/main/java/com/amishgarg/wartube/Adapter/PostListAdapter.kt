@@ -1,4 +1,3 @@
-/*
 package com.amishgarg.wartube.Adapter
 
 import android.content.Intent
@@ -63,7 +62,7 @@ class PostListAdapter : ListAdapter<Post, PostListAdapter.ItemViewholder>(DiffCa
 
             val postsKey = item.author.uid+item.timestamp
 
-            this.like_button.setOnClickListener {
+            /*this.like_button.setOnClickListener {
                 val uMap = HashMap<String, Any>()
                 Log.d("LikeButton", postsKey)
                 uMap[FirebaseUtil.getPostsPath() + postsKey + "/likes"] = item.likes +1
@@ -79,7 +78,7 @@ class PostListAdapter : ListAdapter<Post, PostListAdapter.ItemViewholder>(DiffCa
 
             this.comment_button.setOnClickListener {
 
-            }
+            }*/
 
             setOnClickListener {
 
@@ -108,4 +107,4 @@ class DiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem == newItem
     }
-}*/
+}

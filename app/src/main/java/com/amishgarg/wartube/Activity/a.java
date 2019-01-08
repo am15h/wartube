@@ -21,7 +21,12 @@ public class a {
     final Observer<List<Integer>> subsObserver = new Observer<List<Integer>>() {
         @Override
         public void onChanged(List<Integer> integers) {
+            for(int i = 0; i < 5; i++)
+            {
 
+            }
         }
     };
+
+
 }
