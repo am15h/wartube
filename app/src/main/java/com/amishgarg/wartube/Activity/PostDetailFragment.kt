@@ -2,24 +2,20 @@ package com.amishgarg.wartube.Activity
 
 
 import android.content.Intent
-import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.*
-import androidx.annotation.NonNull
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amishgarg.wartube.Adapter.CommentListAdapter
 import com.amishgarg.wartube.FirebaseUtil
-import com.amishgarg.wartube.GlideUtil
+import com.amishgarg.wartube.PicassoUtil
 import com.amishgarg.wartube.Model.Author
 import com.amishgarg.wartube.Model.Comment
 import com.amishgarg.wartube.R
@@ -28,8 +24,6 @@ import com.amishgarg.wartube.ViewModels.PostDetailViewModel
 import com.amishgarg.wartube.ViewModels.PostDetailViewModelFactory
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.collect.Lists
-import kotlinx.android.synthetic.main.posts_item.view.*
-import androidx.databinding.adapters.NumberPickerBindingAdapter.setValue
 import com.amishgarg.wartube.Model.Post
 import com.google.firebase.database.*
 
@@ -47,9 +41,7 @@ class PostDetailFragment : Fragment() {
     lateinit var newCommentText : EditText
     lateinit var postCommentButton : ImageButton
     lateinit var postLikeCheckBox: CheckBox
-
     private lateinit var recyclerView: RecyclerView
-    //  private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private val mAdapter = CommentListAdapter()
 
@@ -100,11 +92,11 @@ class PostDetailFragment : Fragment() {
 
         postDetailViewModel.getPost().observe(this, Observer {
             postAuthorName.text = it.author.display_name
-            GlideUtil.loadImagePicasso(it.author.profile_pic, postAuthorIcon)
+            PicassoUtil.loadImagePicasso(it.author.profile_pic, postAuthorIcon)
             postText.text = it.text
             posttimestamp.text = TimeDisplay(it.timestamp as Long).getTimeDisplay()
             if(it.type == 1) {
-                GlideUtil.loadImagePicasso(it.full__url, postPhoto)
+                PicassoUtil.loadImagePicasso(it.full__url, postPhoto)
             }
             else{
                 postPhoto.layoutParams.height = 0
@@ -134,8 +126,6 @@ class PostDetailFragment : Fragment() {
 
         postLikeCheckBox.setOnClickListener {
             val isChecked : Boolean = (it as CheckBox).isChecked
-
-//            val postlikesRef = FirebaseUtil.getPostsRef().child(postKey);
 
             val likesRef = FirebaseUtil.getLikesRef().child(postKey)
             val addLike = HashMap<String, Boolean?>()
@@ -185,34 +175,7 @@ class PostDetailFragment : Fragment() {
                 }
             }
 
-           /* postlikesRef.runTransaction(object : Transaction.Handler {
-                override fun doTransaction(mutableData: MutableData): Transaction.Result {
-                    val p = mutableData.getValue(Post::class.java)
-                            ?: return Transaction.success(mutableData)
 
-                    if(isChecked) {
-                        p.likes = p.likes + 1
-                    }else
-                    {
-                        p.likes = p.likes - 1
-
-                    }
-                    // Set value and report transaction success
-                    mutableData.value = p
-                    return Transaction.success(mutableData)
-                }
-
-                override fun onComplete(
-                        databaseError: DatabaseError?,
-                        b: Boolean,
-                        dataSnapshot: DataSnapshot?
-                ) {
-                    // Transaction completed
-                    if(databaseError!=null) {
-                        Log.d("Comment increment", "postTransaction:onComplete:" + databaseError!!)
-                    }
-                }
-            })*/
         }
 
         postCommentButton.setOnClickListener {

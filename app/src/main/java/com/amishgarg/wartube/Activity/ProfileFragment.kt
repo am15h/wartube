@@ -1,7 +1,6 @@
 package com.amishgarg.wartube.Activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,32 +11,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amishgarg.wartube.Adapter.PostsRecyclerAdapter
 import com.amishgarg.wartube.FirebaseUtil
-import com.amishgarg.wartube.GlideUtil
+import com.amishgarg.wartube.PicassoUtil
 import com.amishgarg.wartube.Model.Post
 import com.amishgarg.wartube.R
-import com.amishgarg.wartube.ViewModels.PostDetailViewModel
-import com.amishgarg.wartube.ViewModels.PostsViewModel
-import com.bumptech.glide.Glide
 import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.firebase.ui.database.ObservableSnapshotArray
-import com.firebase.ui.database.SnapshotParser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 
 
 class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
 
     var user: FirebaseUser? = null
     lateinit var auth: FirebaseAuth
     lateinit var databaseReference: DatabaseReference
     private lateinit var recyclerView: RecyclerView
-    //  private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
-/*    private lateinit var postsViewModel : PostsViewModel
-    private lateinit var postsDetailViewModel: PostDetailViewModel*/
     private lateinit var mAdapter : PostsRecyclerAdapter
     private lateinit var userName : TextView
     private lateinit var userImageView : ImageView
@@ -67,7 +57,7 @@ class ProfileFragment : Fragment() {
          userImageView = view.findViewById<ImageView>(R.id.user_img)
          userId = user?.uid.toString()
         userName.setText(user?.displayName)
-        GlideUtil.loadImagePicasso(user?.photoUrl.toString(), userImageView)
+        PicassoUtil.loadImagePicasso(user?.photoUrl.toString(), userImageView)
          myTopPostsQuery = FirebaseUtil.getBaseRef().child("people").
                 child(userId).child("posts").orderByChild("timestamp")
 
@@ -105,29 +95,6 @@ class ProfileFragment : Fragment() {
          recyclerView.adapter = mAdapter
 
      }
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-
-
-
-
-        /* postsViewModel = ViewModelProviders.of(this).get(PostsViewModel::class.java)
-         progressBar_cyclic.visibility = View.VISIBLE
-         postsViewModel.getPostsList().observe(this, Observer {
-             //            Log.d("List100", it[0].author.display_name)
-             mAdapter = PostsRecyclerAdapter(it, context)
-             recyclerView.adapter = mAdapter
-             Log.d("FirebaseQueryLiveData", "Observing")
-             progressBar_cyclic.visibility = View.GONE
-             mAdapter.notifyDataSetChanged()
-         })
-
- */
-
-
-    }
-
 
     override fun onStart() {
         super.onStart()
@@ -156,8 +123,6 @@ class ProfileFragment : Fragment() {
             }else
             {
                 progress2Bar.visibility = View.GONE
-                Toast.makeText(context, "No posts to show!!",
-                        Toast.LENGTH_LONG).show()
             }
 
         }

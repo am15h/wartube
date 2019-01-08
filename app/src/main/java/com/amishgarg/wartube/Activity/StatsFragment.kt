@@ -13,15 +13,9 @@ import com.jjoe64.graphview.series.BarGraphSeries
 import com.jjoe64.graphview.series.DataPoint
 
 import androidx.lifecycle.Observer
-import com.amishgarg.wartube.GlideUtil
+import com.amishgarg.wartube.PicassoUtil
 import com.amishgarg.wartube.ViewModels.StatsViewModel
 import com.squareup.picasso.Picasso
-import com.jjoe64.graphview.helper.StaticLabelsFormatter
-import com.jjoe64.graphview.DefaultLabelFormatter
-import java.text.NumberFormat
-import com.jjoe64.graphview.ValueDependentColor
-
-
 
 
 /**
@@ -36,9 +30,6 @@ import com.jjoe64.graphview.ValueDependentColor
 
 class StatsFragment : Fragment() {
 
-    //todo: check internet
-    //todo:test on small screens
-    // TODO : ADD DATA BINDING
 
     private lateinit var viewModel : StatsViewModel
 
@@ -69,8 +60,8 @@ class StatsFragment : Fragment() {
         logoTS = view!!.findViewById<ImageView>(R.id.img_ts)
         diffTextView = view!!.findViewById(R.id.diff_text)
         graphView = view!!.findViewById(R.id.graph)
-        GlideUtil.loadImagePicasso("https://yt3.ggpht.com/3Ss-aMQD695qaWBSWMy1mt6aNrIs5kIlL78Ccf_YGO4OHV1txzdWGy5J5bCUu7-T5MXJT3_W=w1280-fcrop64=1,32b75a57cd48a5a8-nd-c0xffffffff-rj-k-no", view!!.findViewById(R.id.bannerP))
-        GlideUtil.loadImagePicasso("https://yt3.ggpht.com/cJIQ7MY1vyBjLiTx-HS3qsXtImo3tek6ruE8v7s25OKUya9ive6k7MmNOgB04FPtFcNirJ6gPA=w1280-fcrop64=1,32b75a57cd48a5a8-nd-c0xffffffff-rj-k-no", view!!.findViewById(R.id.bannerT))
+        PicassoUtil.loadImagePicasso("https://yt3.ggpht.com/3Ss-aMQD695qaWBSWMy1mt6aNrIs5kIlL78Ccf_YGO4OHV1txzdWGy5J5bCUu7-T5MXJT3_W=w1280-fcrop64=1,32b75a57cd48a5a8-nd-c0xffffffff-rj-k-no", view!!.findViewById(R.id.bannerP))
+        PicassoUtil.loadImagePicasso("https://yt3.ggpht.com/pZI010B_jIyHwAM7qDEpxZ5Zc4zc7StRe5USIB_QKc17k9NW_oSy0afhxd_jgc7pM3Mqn6FP=w1280-fcrop64=1,32b75a57cd48a5a8-nd-c0xffffffff-rj-k-no", view!!.findViewById(R.id.bannerT))
 
     }
 
@@ -82,8 +73,7 @@ class StatsFragment : Fragment() {
         series.setSpacing(25);
         graphViewSettings(this!!.graphView!!)
 
-       // staticLabelsFormatter.setVerticalLabels(arrayOf("0M", "20M", "40M", "60M", "80M", "100M"))
-        //graphView.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter)
+
         Picasso.get().load("https://yt3.ggpht.com/a-/AN66SAztY6oYWZnS1Cae9o4_msEE1H83Tld5cFtl3Q=s240-mo-c-c0xffffffff-rj-k-no").into(logoPDP);
         Picasso.get().load("https://yt3.ggpht.com/a-/AN66SAxPfKnfHAnAs0rOqaSwINOxDYJsyj-gPBP0OQ=s240-mo-c-c0xffffffff-rj-k-no").into(logoTS)
 
@@ -129,81 +119,3 @@ class StatsFragment : Fragment() {
 
 
 
-
-
-
-
-
-
-
-/*        val qMap = HashMap<String, String>()
-        qMap["part"] = "snippet,contentDetails,statistics"
-        qMap["id"] = CHANNEL_ID_TS
-        qMap["key"] = GOOGLE_YOUTUBE_API_KEY
-
-        val qMap2 = HashMap<String, String>()
-        qMap2["part"] = "snippet,contentDetails,statistics"
-        qMap2["id"] = CHANNEL_ID_PDP
-        qMap2["key"] = GOOGLE_YOUTUBE_API_KEY*/
-
-//        val apiService = ApiClient.getClient().create(ApiInterface::class.java)
-
-
-/*
-        fun getSubsData() : Unit
-        {
-
-            var call = apiService.getSubs(qMap)
-            call.enqueue(object : Callback<ChannelResponse> {
-                override fun onResponse(call: Call<ChannelResponse>, response: Response<ChannelResponse>) {
-
-                    Log.d("URL:", response.raw().request().url().toString())
-                    val channels = response.body()!!.channels
-                    SUBS_TS = channels[0].statistics.subscriberCount
-                    subsTS.text = SUBS_TS.toString()
-                    Log.d("GEEK TS", SUBS_TS.toString() + "")
-
-
-                }
-
-                override fun onFailure(call: Call<ChannelResponse>, t: Throwable) {
-                    Log.d("GEEK", t.toString())
-                }
-            })
-
-            val call2 = apiService.getSubs(qMap2)
-            call2.enqueue(object : Callback<ChannelResponse> {
-                override fun onResponse(call: Call<ChannelResponse>, response: Response<ChannelResponse>) {
-
-                    val channels = response.body()!!.channels
-                    SUBS_PDP = channels[0].statistics.subscriberCount
-                    subsPdp.text = SUBS_PDP.toString()
-                    Log.d("GEEK", SUBS_PDP.toString() + "")
-                    Log.d("GEEK", (SUBS_PDP - SUBS_TS).toString() + " Difference")
-                    diffTextView.text = (SUBS_PDP - SUBS_TS).toString()
-                    var values = arrayOf(DataPoint(0.5, SUBS_PDP.toDouble()), DataPoint(1.5, SUBS_TS.toDouble()), DataPoint(2.5, (SUBS_PDP-SUBS_TS).toDouble()))
-                    series.resetData(values)
-                   // graphView.addSeries(series)
-                }
-
-                override fun onFailure(call: Call<ChannelResponse>, t: Throwable) {
-                    Log.d("GEEK", t.toString())
-                }
-            })
-
-        }
-*/
-
-/*   var shouldStopLoop = false
-
-   val handler = Handler()
-   val runnableCode = runnable {
-       // do something
-       getSubsData()
-       Log.d("GEEK", "called getSubsData")
-       if(!shouldStopLoop)
-       {
-           handler.postDelayed(this, 10000)
-       }
-   }
-   handler.post(runnableCode)*/

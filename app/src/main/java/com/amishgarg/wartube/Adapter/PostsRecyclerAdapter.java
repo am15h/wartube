@@ -1,53 +1,29 @@
 package com.amishgarg.wartube.Adapter;
 
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
-import com.amishgarg.wartube.Activity.PostsFragment;
-import com.amishgarg.wartube.FirebaseUtil;
-import com.amishgarg.wartube.GlideUtil;
+import com.amishgarg.wartube.PicassoUtil;
 import com.amishgarg.wartube.Model.Post;
 import com.amishgarg.wartube.R;
 import com.amishgarg.wartube.TimeDisplay;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PostsRecyclerAdapter extends FirebaseRecyclerAdapter<Post, RecyclerView.ViewHolder> {
 
-    private List<Post> postList;
-    private Context context;
-    int total_types;
+
     String postKey;
     ProgressBar progressBar;
 
@@ -161,104 +137,10 @@ public class PostsRecyclerAdapter extends FirebaseRecyclerAdapter<Post, Recycler
                     ((TextTypeViewHolder) holder).authorName.setText(post.getAuthor().getDisplay_name());
                     ((TextTypeViewHolder) holder).postText.setText(post.getText());
                     ((TextTypeViewHolder) holder).timestamp.setText(new TimeDisplay((Long)post.getTimestamp()).getTimeDisplay());
-                    GlideUtil.loadImagePicasso(post.getAuthor().getProfile_pic(), ((TextTypeViewHolder) holder).authorIcon);
+                    PicassoUtil.loadImagePicasso(post.getAuthor().getProfile_pic(), ((TextTypeViewHolder) holder).authorIcon);
                     ((TextTypeViewHolder)holder).postNumLikes.setText(post.getLikes()+"");
                     ((TextTypeViewHolder)holder).postNumComments.setText(post.getComments()+"");
 
-//                    DataSnapshot dataSnapshot = FirebaseUtil.getLikesRef().child(postKey).
-
-                  /*  FirebaseUtil.getBaseRef().child("likes").child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.hasChild(FirebaseUtil.getCurrentUserId())){
-                                Log.d("LikesComment", "Inside If");
-
-                                ((TextTypeViewHolder) holder).likeButton.setChecked(true);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-
-                   ((TextTypeViewHolder) holder).likeButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final boolean checked = ((CheckBox) v).isChecked();
-                            DatabaseReference likesRef = FirebaseUtil.getLikesRef().child(postKey);
-                            Map addLike = new HashMap();
-                            addLike.put(FirebaseUtil.getCurrentUserId(), true);
-
-                            Map remLike = new HashMap();
-                            remLike.put(FirebaseUtil.getCurrentUserId(),null);
-
-
-
-                            if(checked)
-                            {
-                                likesRef.updateChildren(addLike, new DatabaseReference.CompletionListener() {
-                                    @Override
-                                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                        DatabaseReference postlikesRef = FirebaseUtil.getPostsRef().child(postKey);
-                                        postlikesRef.runTransaction(new Transaction.Handler() {
-                                            @NonNull
-                                            @Override
-                                            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                                Post p = mutableData.getValue(Post.class);
-                                                p.setLikes(p.getLikes()+1);
-                                                mutableData.setValue(p);
-                                                return Transaction.success(mutableData);
-                                            }
-
-                                            @Override
-                                            public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
-                                                if(databaseError!=null) {
-                                                    Log.d("Likes increment", "postTransaction:onComplete:" + databaseError);
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                            else if (!checked)
-                            {
-
-                                likesRef.updateChildren(remLike, new DatabaseReference.CompletionListener() {
-                                    @Override
-                                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                        DatabaseReference postlikesRef = FirebaseUtil.getPostsRef().child(postKey);
-                                        postlikesRef.runTransaction(new Transaction.Handler() {
-                                            @NonNull
-                                            @Override
-                                            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                                Post p = mutableData.getValue(Post.class);
-                                                p.setLikes(p.getLikes()-1);
-                                                mutableData.setValue(p);
-                                                return Transaction.success(mutableData);
-                                            }
-
-                                            @Override
-                                            public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
-                                                if(databaseError!=null) {
-                                                    Log.d("Likes increment", "postTransaction:onComplete:" + databaseError);
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        }
-                    });*/
-
-                   /* ((TextTypeViewHolder) holder).commentButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Navigation.findNavController(v).navigate(R.id.post_detail_dest);
-                        }
-                    });*/
 
                     ((TextTypeViewHolder)holder).baseLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -275,8 +157,8 @@ public class PostsRecyclerAdapter extends FirebaseRecyclerAdapter<Post, Recycler
                     ((ImageTypeViewHolder) holder).authorName.setText(post.getAuthor().getDisplay_name());
                     ((ImageTypeViewHolder) holder).postText.setText(post.getText());
                     ((ImageTypeViewHolder) holder).timestamp.setText(new TimeDisplay((Long)post.getTimestamp()).getTimeDisplay());
-                    GlideUtil.loadImagePicasso(post.getAuthor().getProfile_pic(), ((ImageTypeViewHolder) holder).authorIcon);
-                    GlideUtil.loadImagePicasso(post.getFull__url(), ((ImageTypeViewHolder) holder).postPhoto);
+                    PicassoUtil.loadImagePicasso(post.getAuthor().getProfile_pic(), ((ImageTypeViewHolder) holder).authorIcon);
+                    PicassoUtil.loadImagePicasso(post.getFull__url(), ((ImageTypeViewHolder) holder).postPhoto);
                     ((ImageTypeViewHolder)holder).postNumLikes.setText(post.getLikes() +"");
                     ((ImageTypeViewHolder)holder).postNumComments.setText(String.valueOf(post.getComments() +""));
                     ((ImageTypeViewHolder)holder).baseLayout.setOnClickListener(new View.OnClickListener() {
@@ -289,105 +171,10 @@ public class PostsRecyclerAdapter extends FirebaseRecyclerAdapter<Post, Recycler
                         }
                     });
                     break;
-/*                    FirebaseUtil.getBaseRef().child("likes").child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.hasChild(FirebaseUtil.getCurrentUserId())){
-                                Log.d("LikesComment", "Inside If");
-
-                                ((ImageTypeViewHolder) holder).likeButton.setChecked(true);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-                    ((ImageTypeViewHolder) holder).likeButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final boolean checked = ((CheckBox) v).isChecked();
-                            DatabaseReference likesRef = FirebaseUtil.getLikesRef().child(postKey);
-                            Map addLike = new HashMap();
-                            addLike.put(FirebaseUtil.getCurrentUserId(), true);
-
-                            Map remLike = new HashMap();
-                            remLike.put(FirebaseUtil.getCurrentUserId(),null);
-
-                            if(checked)
-                            {
-                                likesRef.updateChildren(addLike, new DatabaseReference.CompletionListener() {
-                                    @Override
-                                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                        DatabaseReference postlikesRef = FirebaseUtil.getPostsRef().child(postKey);
-                                        postlikesRef.runTransaction(new Transaction.Handler() {
-                                            @NonNull
-                                            @Override
-                                            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                                Post p = mutableData.getValue(Post.class);
-                                                p.setLikes(p.getLikes()+1);
-                                                mutableData.setValue(p);
-                                                return Transaction.success(mutableData);
-                                            }
-
-                                            @Override
-                                            public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
-                                                if(databaseError!=null) {
-                                                    Log.d("Likes increment", "postTransaction:onComplete:" + databaseError);
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                            else if (!checked)
-                            {
-
-                                likesRef.updateChildren(remLike, new DatabaseReference.CompletionListener() {
-                                    @Override
-                                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                        DatabaseReference postlikesRef = FirebaseUtil.getPostsRef().child(postKey);
-                                        postlikesRef.runTransaction(new Transaction.Handler() {
-                                            @NonNull
-                                            @Override
-                                            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                                Post p = mutableData.getValue(Post.class);
-                                                p.setLikes(p.getLikes()-1);
-                                                mutableData.setValue(p);
-                                                return Transaction.success(mutableData);
-                                            }
-
-                                            @Override
-                                            public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
-                                                if(databaseError!=null) {
-                                                    Log.d("Likes increment", "postTransaction:onComplete:" + databaseError);
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        }
-                    });
-
-                    ((ImageTypeViewHolder) holder).commentButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Bundle args = new Bundle();
-                            args.putString("postKey", postKey);
-                            Navigation.findNavController(v).navigate(R.id.post_detail_dest, args);
-                        }
-                    });*/
-
 
             }
 
-
-
         }
     }
-
 
 }

@@ -8,11 +8,6 @@ import com.amishgarg.wartube.livedata.YoutubeRepository
 
 class StatsViewModel: ViewModel() {
 
-    /*lateinit var repository: YoutubeRepository
-
-    constructor(){
-        repository = YoutubeRepository()
-    }*/
 
 
     val subsData : LiveData<List<Int>> by lazy {

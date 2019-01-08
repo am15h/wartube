@@ -58,17 +58,14 @@ public class FirebaseCommentLiveData extends LiveData<List<Comment>> {
 
                 Log.d(LOG_TAG, "Inside on data changed");
                 if (postSnapshot != null) {
-                    //Log.d("FirebaseLiveData", postSnapshot.getValue(Post.class).getTimestamp().toString());
-                    //postList.add(postSnapshot.getValue(Post.class));
                     commentList.add(postSnapshot.getValue(Comment.class));
 
                 } else {
                     Log.e(LOG_TAG, "NULL POSTSNAP");
                 }
             }
-
             setValue(commentList);
-            // posts.setValue(postList);
+
         }
 
         @Override

@@ -36,6 +36,6 @@
         android:label="ProfileFragment" />
     <activity
         android:id="@+id/signup_dest"
-        android:name="com.amishgarg.wartube.EmailSignUpActivity"
+        android:name="com.amishgarg.wartube.Activity.EmailSignUpActivity"
         android:label="EmailSignUpActivity" />
 </navigation>

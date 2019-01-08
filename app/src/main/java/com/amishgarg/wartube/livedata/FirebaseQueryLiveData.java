@@ -64,8 +64,7 @@ public class FirebaseQueryLiveData extends LiveData<List<Post>> {
 
                 Log.d(LOG_TAG, "Inside on data changed");
                 if (postSnapshot != null) {
-                    //Log.d("FirebaseLiveData", postSnapshot.getValue(Post.class).getTimestamp().toString());
-                    //postList.add(postSnapshot.getValue(Post.class));
+
                     postList.add(postSnapshot.getValue(Post.class));
 
                 } else {
@@ -74,7 +73,6 @@ public class FirebaseQueryLiveData extends LiveData<List<Post>> {
             }
 
             setValue(postList);
-           // posts.setValue(postList);
         }
 
         @Override

@@ -59,8 +59,6 @@ public class FirebaseLikesLiveData extends LiveData<List<Likes>> {
 
                 Log.d(LOG_TAG, "Inside on data changed likees");
                 if (postSnapshot != null) {
-                    //Log.d("FirebaseLiveData", postSnapshot.getValue(Post.class).getTimestamp().toString());
-                    //postList.add(postSnapshot.getValue(Post.class));
                     likesList.add(postSnapshot.getValue(Likes.class));
 
                 } else {

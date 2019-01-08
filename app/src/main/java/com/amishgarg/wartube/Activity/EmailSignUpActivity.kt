@@ -1,4 +1,4 @@
-package com.amishgarg.wartube
+package com.amishgarg.wartube.Activity
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,7 +13,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.navigation.fragment.findNavController
+import com.amishgarg.wartube.R
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -24,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_email_sign_up.*
-import kotlinx.android.synthetic.main.activity_welcome.*
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 

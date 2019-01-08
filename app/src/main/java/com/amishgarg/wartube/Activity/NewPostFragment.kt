@@ -65,6 +65,7 @@ class NewPostFragment : Fragment() {
         addImageButton = view.findViewById(R.id.add_img_button)
         postEditText = view.findViewById(R.id.new_post_text)
         postButton = view.findViewById(R.id.new_post_button)
+        discardButton = view.findViewById(R.id.discard_button)
         progressDialog = ProgressDialog(context)
         progressDialog.setMessage("Uploading...")
         add_img_button.setOnClickListener {
@@ -82,6 +83,9 @@ class NewPostFragment : Fragment() {
                         Toast.LENGTH_LONG).show()
             }
 
+        }
+        discardButton.setOnClickListener {
+            findNavController().navigate(R.id.posts_dest)
         }
 
 

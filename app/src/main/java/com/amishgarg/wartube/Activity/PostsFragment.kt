@@ -51,24 +51,16 @@ class PostsFragment : Fragment() {
 
     val TAG = "PostsFragmentDebug"
 
-
-
-        lateinit var progressBar: ProgressBar
-
-
+    lateinit var progressBar: ProgressBar
     var user: FirebaseUser? = null
     lateinit var auth: FirebaseAuth
     lateinit var databaseReference: DatabaseReference
     private lateinit var recyclerView: RecyclerView
-  //  private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var postsViewModel : PostsViewModel
     private lateinit var postsDetailViewModel: PostDetailViewModel
     private lateinit var mAdapter : PostsRecyclerAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -136,20 +128,6 @@ class PostsFragment : Fragment() {
 
         recyclerView.layoutManager = viewManager
         recyclerView.adapter = mAdapter
-
-
-       /* postsViewModel = ViewModelProviders.of(this).get(PostsViewModel::class.java)
-        progressBar_cyclic.visibility = View.VISIBLE
-        postsViewModel.getPostsList().observe(this, Observer {
-            //            Log.d("List100", it[0].author.display_name)
-            mAdapter = PostsRecyclerAdapter(it, context)
-            recyclerView.adapter = mAdapter
-            Log.d("FirebaseQueryLiveData", "Observing")
-            progressBar_cyclic.visibility = View.GONE
-            mAdapter.notifyDataSetChanged()
-        })
-
-*/
 
 
     }

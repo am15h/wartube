@@ -97,32 +97,6 @@ class YoutubeRepository {
     }
 
 
-    fun callAsynchronousTask() {
-        val handler = Handler()
-        val timer = Timer()
-        val doAsynchronousTask = object : TimerTask() {
-            override fun run() {
-                handler.post {
-                    try {
-                        val performBackgroundTask = PerformBackgroundTask()
-                        // PerformBackgroundTask this class is the class that extends AsynchTask
-                        performBackgroundTask.execute()
-                    } catch (e: Exception) {
-                        // TODO Auto-generated catch block
-                    }
-                }
-            }
-
-
-        }
-        timer.schedule(doAsynchronousTask, 0, 1000) //execute in every 50000 ms
-    }
-}
-
-class PerformBackgroundTask() : AsyncTask<Void, Void, Void>(){
-
-    override fun doInBackground(vararg params: Void?): Void {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
 }
+

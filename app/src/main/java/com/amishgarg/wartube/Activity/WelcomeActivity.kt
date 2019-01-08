@@ -239,25 +239,9 @@ class WelcomeActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun eupdateUI(user: FirebaseUser?) {
-        //progressDialog.hide();
 
         if (user != null) {
-           /* Log.w(TAG, user.getEmail())
-            val s: CharSequence = user.email.toString()
-            Snackbar.make(this.findViewById(R.id.welcome_layout), s , Snackbar.LENGTH_SHORT).show()
-            val uMap = HashMap<String, Any>()
-            uMap["display_name"] = user.displayName.toString()
-            uMap["profile_pic"] = user.photoUrl.toString()
-            databaseReference.child("people").child(user!!.uid).updateChildren(uMap, object: DatabaseReference.CompletionListener
-            {
-                override fun onComplete(p0: DatabaseError?, p1: DatabaseReference) {
-                    if (p0 != null) {
-                        Toast.makeText(this@WelcomeActivity,
-                                "Couldn't save user data: " + p0.message,
-                                Toast.LENGTH_LONG).show()
-                    }}
-            }
-            )*/
+
             if(user.isEmailVerified)
             {
                 Toast.makeText(this, "Successfully logged in",
@@ -265,7 +249,6 @@ class WelcomeActivity : AppCompatActivity(), View.OnClickListener {
             }
             finish()
             Log.d("WelcomeActivity", "COde is here 2")
-            //  setContentView(R.layout.)
 
         } else {
             Toast.makeText(this,"Signed Out",Toast.LENGTH_LONG)

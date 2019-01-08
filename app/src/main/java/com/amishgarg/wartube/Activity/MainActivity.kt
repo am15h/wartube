@@ -4,7 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -17,6 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.ui.*
 import com.amishgarg.wartube.ViewModels.PostDetailViewModel
 import com.amishgarg.wartube.ViewModels.PostDetailViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : androidx.appcompat.app.AppCompatActivity() {
 
@@ -91,4 +96,37 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
         }
         return null
     }
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+
+        return when (item?.itemId) {
+            R.id.settings_dest -> {
+                if(item?.itemId == R.id.settings_dest)
+                {
+                    if(FirebaseAuth.getInstance().currentUser != null) {
+                        FirebaseAuth.getInstance().signOut()
+                        Toast.makeText(this, "Successfully Signed out",
+                                Toast.LENGTH_SHORT).show()
+                    }else
+                    {
+                        Toast.makeText(this, "User not signed in",
+                                Toast.LENGTH_SHORT).show()
+                    }
+                }
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+
 }
