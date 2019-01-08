@@ -12,21 +12,5 @@ import androidx.lifecycle.Observer;
 
 
 public class a {
-
-    DataPoint[] values = {new DataPoint(0.5,3), new DataPoint(1.5,3), new DataPoint(2.5,3)};
-
-    List<Post> posts = new ArrayList<>();
-
-
-    final Observer<List<Integer>> subsObserver = new Observer<List<Integer>>() {
-        @Override
-        public void onChanged(List<Integer> integers) {
-            for(int i = 0; i < 5; i++)
-            {
-
-            }
-        }
-    };
-
-
+    //This class was used for converting java to kotlin
 }

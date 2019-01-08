@@ -18,66 +18,90 @@
 
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="true">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/profilecard"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/profilecard"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
 
-                <com.mikhaellopez.circularimageview.CircularImageView
-                    android:id="@+id/user_img"
-                    android:layout_width="85dp"
-                    android:layout_height="85dp"
-                    android:layout_alignParentStart="false"
-                    android:layout_alignParentTop="false"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
-
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:src="@drawable/cyborg2"
-                    app:civ_border_width="1dp"
-                    tools:srcCompat="@tools:sample/avatars[0]" />
-
-                <TextView
-                    android:id="@+id/user_name"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp"
-                    android:fontFamily="@font/rubik_medium"
-                    android:text="Amish Garg"
-                    android:textAlignment="center"
-                    android:textSize="30sp" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <View
-                    android:id="@+id/divider2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="#8899a6" />
-            </LinearLayout>
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:id="@+id/user_img"
+                        android:layout_width="85dp"
+                        android:layout_height="85dp"
+                        android:layout_alignParentStart="false"
+                        android:layout_alignParentTop="false"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
 
-        </com.google.android.material.card.MaterialCardView>
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/cyborg2"
+                        app:civ_border_width="1dp"
+                        tools:srcCompat="@tools:sample/avatars[0]" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/user_postsrecycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profilecard" />
+                    <TextView
+                        android:id="@+id/user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="4dp"
+                        android:fontFamily="@font/rubik_medium"
+                        android:text="Amish Garg"
+                        android:textAlignment="center"
+                        android:textSize="30sp" />
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#8899a6" />
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimaryDark"
+                        android:fontFamily="@font/rubik_medium"
+                        android:text="My Posts"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white" />
+
+                    <View
+                        android:id="@+id/divider4"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#8899a6" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/user_postsrecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profilecard" />
 
 
-    </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
 
 
 

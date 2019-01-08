@@ -16,6 +16,12 @@ import androidx.lifecycle.Observer
 import com.amishgarg.wartube.GlideUtil
 import com.amishgarg.wartube.ViewModels.StatsViewModel
 import com.squareup.picasso.Picasso
+import com.jjoe64.graphview.helper.StaticLabelsFormatter
+import com.jjoe64.graphview.DefaultLabelFormatter
+import java.text.NumberFormat
+import com.jjoe64.graphview.ValueDependentColor
+
+
 
 
 /**
@@ -72,20 +78,27 @@ class StatsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val series = BarGraphSeries(arrayOf(DataPoint(0.2, 2.0), DataPoint(1.0, 5.0), DataPoint(2.0, 3.0)))
         graphView.addSeries(series)
+        series.setDrawValuesOnTop(true)
         series.setSpacing(25);
         graphViewSettings(this!!.graphView!!)
 
+       // staticLabelsFormatter.setVerticalLabels(arrayOf("0M", "20M", "40M", "60M", "80M", "100M"))
+        //graphView.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter)
         Picasso.get().load("https://yt3.ggpht.com/a-/AN66SAztY6oYWZnS1Cae9o4_msEE1H83Tld5cFtl3Q=s240-mo-c-c0xffffffff-rj-k-no").into(logoPDP);
         Picasso.get().load("https://yt3.ggpht.com/a-/AN66SAxPfKnfHAnAs0rOqaSwINOxDYJsyj-gPBP0OQ=s240-mo-c-c0xffffffff-rj-k-no").into(logoTS)
 
         viewModel = ViewModelProviders.of(this).get(StatsViewModel::class.java)
 
+
+
         val subsObserver: Observer<List<Int>> = Observer {
             subsPdp.text = it[0].toString()
             subsTS.text = it[1].toString()
             diffTextView.text = it[2].toString()
-            var values = arrayOf(DataPoint(0.5, it[0].toDouble()), DataPoint(1.5, it[1].toDouble()), DataPoint(2.5, it[2].toDouble()))
+            var values = arrayOf(DataPoint(1.0, it[0].toDouble()), DataPoint(2.0, it[1].toDouble()), DataPoint(3.0, it[2].toDouble()))
             series.resetData(values)
+
+            series.setValuesOnTopColor(R.color.colorPrimaryDark);
         }
 
         viewModel.subsData.observe(this, subsObserver)
@@ -107,9 +120,6 @@ class StatsFragment : Fragment() {
         graphView.getViewport().setScrollableY(true); // enables vertical scrolling
     }
 }
-
-
-
 
 
 

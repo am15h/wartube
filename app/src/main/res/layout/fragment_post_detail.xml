@@ -173,6 +173,22 @@ android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="#8899a6" />
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:fontFamily="@font/rubik_medium"
+            android:text="Comments"
+            android:textAlignment="center"
+            android:textColor="@android:color/white" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#8899a6" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_comments"
             android:layout_width="match_parent"
@@ -197,7 +213,7 @@ android:layout_height="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:background="@color/grey">
+        android:background="#F2F2F2">
 
         <EditText
             android:id="@+id/new_post_comment"
@@ -215,13 +231,13 @@ android:layout_height="wrap_content"
 
         <ImageButton
             android:id="@+id/post_comment_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="0dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_outline_send_24px" />
+            android:src="@drawable/ic_right_arrow" />
 
     </RelativeLayout>
 </RelativeLayout>
