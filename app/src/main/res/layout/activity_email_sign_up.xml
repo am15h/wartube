@@ -63,6 +63,16 @@
                 android:layout_centerInParent="true"
                 app:srcCompat="@drawable/ic_pencil_edit_button" />
 
+            <TextView
+                android:id="@+id/ttv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@color/common_google_signin_btn_text_light_default"
+                android:fontFamily="@font/rubik_medium"
+                android:text="Upload Image"
+                android:textColor="@android:color/white" />
+
         </RelativeLayout>
 
         <com.google.android.material.textfield.TextInputLayout
