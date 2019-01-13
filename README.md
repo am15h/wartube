@@ -1,6 +1,7 @@
 # wartube
 Wartube for MDG Droid Wars 2018
 
+## Latest Feature : Notifications for new posts(using FCM server)
 
 ## Realtime Subscriber Count and difference
 
