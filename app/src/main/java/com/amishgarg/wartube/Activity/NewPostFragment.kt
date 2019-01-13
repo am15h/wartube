@@ -20,8 +20,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.amishgarg.wartube.FirebaseUtil
 import com.amishgarg.wartube.Model.Author
+import com.amishgarg.wartube.Model.Notif
 import com.amishgarg.wartube.Model.Post
+import com.amishgarg.wartube.Model.User
 import com.amishgarg.wartube.R
+import com.amishgarg.wartube.rest.ApiClient
+import com.amishgarg.wartube.rest.ApiInterface
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
@@ -32,6 +36,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.fragment_new_post.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -193,6 +200,10 @@ class NewPostFragment : Fragment() {
                     if (p0 == null) {
                         progressDialog.hide()
                         findNavController().navigate(R.id.posts_dest)
+                        for(token in MainActivity.tokenList)
+                        {
+                            sendNotification(token, author.display_name)
+                        }
                     }
                     else
                     {
@@ -241,6 +252,10 @@ class NewPostFragment : Fragment() {
                     if (p0 == null) {
                         progressDialog.hide()
                         findNavController().navigate(R.id.posts_dest)
+                        for(token in MainActivity.tokenList)
+                        {
+                            sendNotification(token, author.display_name)
+                        }
                     }
                     else
                     {
@@ -256,6 +271,27 @@ class NewPostFragment : Fragment() {
 
     }
 
+
+    private fun sendNotification(token : String, name : String)
+    {
+        val apiInterface =  ApiClient.getClient2().create(ApiInterface::class.java)
+        apiInterface.sendUser(token, "New Post", "$name posted something").enqueue(object : Callback<Notif>{
+            override fun onFailure(call: Call<Notif>, t: Throwable) {
+                Log.d("FirebaseNotif", "Unable to submit post to API.");
+            }
+
+            override fun onResponse(call: Call<Notif>, response: Response<Notif>) {
+                Log.d("FirebaseNotif", response.raw().request().url().toString())
+                if(response.isSuccessful()) {
+
+                    Log.d("FirebaseNotif", "post submitted to API." + response.body().toString());
+                }else
+                {
+                    Log.d("FirebaseNotif", "response fail" + response.message() + "|" + response.code());
+                }
+            }
+        })
+    }
 }
 
 

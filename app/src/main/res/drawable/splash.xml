@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@android:color/background_light"/>
+        android:drawable="@color/colorPrimaryLight"/>
 
    <item>
        <bitmap

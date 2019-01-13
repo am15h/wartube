@@ -17,6 +17,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -24,6 +26,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.iid.InstanceIdResult
 import kotlinx.android.synthetic.main.activity_email_sign_up.*
 import kotlinx.android.synthetic.main.activity_welcome.*
 import java.util.HashMap
@@ -127,7 +131,7 @@ class WelcomeActivity : AppCompatActivity(), View.OnClickListener {
             } else {
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "signInWithCredential:failure", task.exception)
-                Snackbar.make(findViewById(R.id.welcome_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(findViewById(R.id.welcome_layout), "Authentication Failed." + task.exception?.message, Snackbar.LENGTH_SHORT).show()
                 updateUI(null)
             }
 
@@ -163,14 +167,14 @@ class WelcomeActivity : AppCompatActivity(), View.OnClickListener {
             } else {
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "signInWithEmail:failure", task.exception)
-                Toast.makeText(baseContext, "Authentication failed.",
+                Toast.makeText(baseContext, "Authentication failed." + task.exception?.message,
                         Toast.LENGTH_SHORT).show()
                 eupdateUI(null)
             }
 
             // [START_EXCLUDE]
             if (!task.isSuccessful) {
-                Toast.makeText(baseContext, "Authentication failed.",
+                Toast.makeText(baseContext, "Authentication failed." + task.exception?.message,
                         Toast.LENGTH_SHORT).show()
             }
 //                    hideProgressDialog()
@@ -208,22 +212,37 @@ class WelcomeActivity : AppCompatActivity(), View.OnClickListener {
         //progressDialog.hide();
 
         if (user != null) {
+
             Log.w(TAG, user.getEmail())
             val s: CharSequence = user.email.toString()
             Snackbar.make(this.findViewById(R.id.welcome_layout), s , Snackbar.LENGTH_SHORT).show()
             val uMap = HashMap<String, Any>()
             uMap["display_name"] = user.displayName.toString()
             uMap["profile_pic"] = user.photoUrl.toString()
-            databaseReference.child("people").child(user!!.uid).updateChildren(uMap, object: DatabaseReference.CompletionListener
-                         {
-                             override fun onComplete(p0: DatabaseError?, p1: DatabaseReference) {
-                                 if (p0 != null) {
-                                     Toast.makeText(this@WelcomeActivity,
-                                             "Couldn't save user data: " + p0.message,
-                                             Toast.LENGTH_LONG).show()
-                                 }}
-                         }
-            )
+            FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(object : OnCompleteListener<InstanceIdResult> {
+                override fun onComplete(p0: Task<InstanceIdResult>) {
+                    if(p0.isSuccessful)
+                    {
+                        Log.d("FirebaseNotif", p0.result?.token)
+                        uMap["token"] = p0.result?.token.toString()
+                        databaseReference.child("people").child(user!!.uid).updateChildren(uMap, object: DatabaseReference.CompletionListener
+                        {
+                            override fun onComplete(p0: DatabaseError?, p1: DatabaseReference) {
+                                if (p0 != null) {
+                                    Toast.makeText(this@WelcomeActivity,
+                                            "Couldn't save user data: " + p0.message,
+                                            Toast.LENGTH_LONG).show()
+                                }}
+                        }
+                        )
+                    }
+                    else
+                    {
+                        Log.d("FirebaseNotif", p0.exception?.message)
+                    }
+                }
+            })
+
             if(user.isEmailVerified)
             {
                 Toast.makeText(this, "Successfully logged in",

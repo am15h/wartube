@@ -14,6 +14,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.amishgarg.wartube.R
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -21,6 +23,8 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.iid.InstanceIdResult
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_email_sign_up.*
@@ -189,16 +193,30 @@ class EmailSignUpActivity : AppCompatActivity() {
                     val uMap = HashMap<String, Any>()
                     uMap["display_name"] = user.displayName.toString()
                     uMap["profile_pic"] = user.photoUrl.toString()
-                    databaseReference.child("people").child(user!!.uid).updateChildren(uMap, object: DatabaseReference.CompletionListener
-                    {
-                        override fun onComplete(p0: DatabaseError?, p1: DatabaseReference) {
-                            if (p0 != null) {
-                                Toast.makeText(this@EmailSignUpActivity,
-                                        "Couldn't save user data: " + p0.message,
-                                        Toast.LENGTH_LONG).show()
-                            }}
-                    }
-                    )
+                    FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(object : OnCompleteListener<InstanceIdResult> {
+                        override fun onComplete(p0: Task<InstanceIdResult>) {
+                            if(p0.isSuccessful)
+                            {
+                                Log.d("FirebaseNotif", p0.result?.token)
+                                uMap["token"] = p0.result?.token.toString()
+                                databaseReference.child("people").child(user!!.uid).updateChildren(uMap, object: DatabaseReference.CompletionListener
+                                {
+                                    override fun onComplete(p0: DatabaseError?, p1: DatabaseReference) {
+                                        if (p0 != null) {
+                                            Toast.makeText(this@EmailSignUpActivity,
+                                                    "Couldn't save user data: " + p0.message,
+                                                    Toast.LENGTH_LONG).show()
+                                        }}
+                                }
+                                )
+                            }
+                            else
+                            {
+                                Log.d("FirebaseNotif", p0.exception?.message)
+                            }
+                        }
+                    })
+
                 }
 
 

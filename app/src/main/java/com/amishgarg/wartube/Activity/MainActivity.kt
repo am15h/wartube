@@ -1,6 +1,10 @@
 package com.amishgarg.wartube.Activity
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -26,12 +30,25 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.InstanceIdResult
 import com.google.android.gms.tasks.Task
 import androidx.annotation.NonNull
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.amishgarg.wartube.FirebaseUtil
+import com.amishgarg.wartube.Model.User
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.iid.FirebaseInstanceId
-
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
 
 
 class MainActivity : androidx.appcompat.app.AppCompatActivity() {
+
+    val CHANNEL_ID = "wartube";
+    val CHANNEL_NAME = "Wartube"
+    val CHANNEL_DESC = "Posts Notifications"
 
     //todo: loading dialogs wherever required
     //    //todo: Material UI
@@ -57,6 +74,7 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
 
         lateinit var host: NavHostFragment
         lateinit var navController: NavController
+        lateinit var tokenList : MutableList<String>
 
     }
 
@@ -69,6 +87,8 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
         //Toolbar and host and navController
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        tokenList = ArrayList<String>()
 
          host = supportFragmentManager
                 .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
@@ -84,7 +104,7 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
 //            systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
         // Get token
-        FirebaseInstanceId.getInstance().instanceId
+      /*  FirebaseInstanceId.getInstance().instanceId
                 .addOnCompleteListener(OnCompleteListener { task ->
                     if (!task.isSuccessful) {
                         Log.w("notificationfb", "getInstanceId failed", task.exception)
@@ -99,7 +119,47 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                     Toast.makeText(this@MainActivity, token, Toast.LENGTH_SHORT).show()
                 })
 
+*/
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            val channel : NotificationChannel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
+            channel.description = CHANNEL_DESC
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(channel)
+        }
 
+        FirebaseMessaging.getInstance().subscribeToTopic("updates")
+//        displayNotification()
+
+
+        val tokenQuery =  FirebaseUtil.getBaseRef().child("people")
+                .orderByChild("token")
+        tokenQuery.addValueEventListener(object: ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d("FirebaseNotif", p0.message)
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                for(peopleSnapshot in p0.children)
+                {
+                    if(peopleSnapshot.exists()) {
+                        if(peopleSnapshot.getValue(User::class.java)?.token != null){
+                                tokenList.add(peopleSnapshot.getValue(User::class.java)?.token!!)
+                                Log.d("FirebaseNotif", "tokenlist" + tokenList[0])
+                            }
+                    else
+                        {
+                            Log.d("FirebaseNotif", "tkoennull")
+                        }
+                    }
+                    else{
+                        Log.d("FirebaseNotif", "peoplenull")
+
+                    }
+                }
+            }
+        })
     }
 
 
@@ -152,5 +212,7 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
         }
     }
 
+ /*
+    }*/
 
 }
