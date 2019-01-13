@@ -23,6 +23,14 @@ import com.amishgarg.wartube.ViewModels.PostDetailViewModel
 import com.amishgarg.wartube.ViewModels.PostDetailViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 
+import com.google.firebase.iid.InstanceIdResult
+import com.google.android.gms.tasks.Task
+import androidx.annotation.NonNull
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
+
+
+
 class MainActivity : androidx.appcompat.app.AppCompatActivity() {
 
     //todo: loading dialogs wherever required
@@ -74,6 +82,22 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
         })*/
         Log.d("MainActivityStuff", getVisibleFragment().toString() )
 //            systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+
+        // Get token
+        FirebaseInstanceId.getInstance().instanceId
+                .addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Log.w("notificationfb", "getInstanceId failed", task.exception)
+                        return@OnCompleteListener
+                    }
+
+                    // Get new Instance ID token
+                    val token = task.result!!.token
+
+
+                    Log.d("notificationfb", token)
+                    Toast.makeText(this@MainActivity, token, Toast.LENGTH_SHORT).show()
+                })
 
 
     }

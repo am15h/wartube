@@ -39,7 +39,9 @@ android {
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
     }
-
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
 
 }
 
@@ -82,6 +84,7 @@ dependencies {
 
     //Graph
     implementation 'com.jjoe64:graphview:4.2.2'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
 
     //Fire base
     implementation 'com.squareup.picasso:picasso:2.71828'
@@ -99,6 +102,9 @@ dependencies {
 
     //FirebaseUI
     implementation 'com.firebaseui:firebase-ui-database:4.3.1'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+
+
 }
 repositories {
     mavenCentral()
