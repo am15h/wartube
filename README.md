@@ -10,7 +10,7 @@ Wartube for MDG Droid Wars 2018
 
 ## Realtime graph
 
-![Live Stats](https://raw.githubusercontent.com/git-amish/wartube/final/screenshots/Realtime.jpeg)
+![Live Stats](https://raw.githubusercontent.com/git-amish/wartube/final/screenshots/Realtime(2).jpeg)
 
 ## Posts
 
